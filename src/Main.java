@@ -41,22 +41,19 @@ public class Main {
     public static void menu(Scanner teclado){
         //O Programa em si vem aqui
         int op = 0;
-        System.out.println("1-Verificar Conformidada\n2-Ver Perguntas\n3-Sair");
+        System.out.println("1-Verificar Conformidada\n2-Ver Perguntas\n3-Avaliar Pergunta\n4-Sair");
         op = teclado.nextInt();
         switch(op) {
             case 1:
                 aderencia();
                 break;
             case 2:
-                for (int i = 0; i < Checklist.perguntas.size(); i++){
-                    if (Checklist.perguntas.get(i).getResultado() == null){
-                        System.out.println(i + " " + Checklist.perguntas.get(i).getDescricao() + " Não Avaliado");
-                    } else {
-                        System.out.println(i + " " + Checklist.perguntas.get(i).getDescricao() + " " + Checklist.perguntas.get(i).getResultado());
-                    }
-                }
+                Checklist.verPerguntas();
                 break;
             case 3:
+                System.out.println("Avaliando");
+                break;
+            case 4:
                 System.out.println("Realizando log out...");
                 Singleton.logout();
                 break;
@@ -71,12 +68,15 @@ public class Main {
         Pergunta p2 = new Pergunta("Github?","Gustavo");
         p2.setResultado("Não Conforme - Prioridade Baixa");
         Checklist.perguntas.add(p2);
+        Pergunta p3 = new Pergunta("Requisitos?","Gustavo");
+        Checklist.perguntas.add(p3);
     }
 
     public static void aderencia(){
-        System.out.println("Conformidade: " + Checklist.verconforme() + " %");
-        System.out.println("Baixa: " + Checklist.verbaixa()+ " %");
-        System.out.println("Média: " + Checklist.vermedia()+ " %");
-        System.out.println("Alta: " + Checklist.veralta()+ " %");
+        System.out.println("Conformidade (Aderência): " + Checklist.verconforme() + " %");
+        System.out.println("Não Conformidade - Prioridade Baixa: " + Checklist.verbaixa()+ " %");
+        System.out.println("Não Conformidade - Prioridade Média: " + Checklist.vermedia()+ " %");
+        System.out.println("Não Conformidade - Prioridade Alta: " + Checklist.veralta()+ " %");
+        System.out.println("Total Avaliadas: " + Checklist.vernull());
     }
 }

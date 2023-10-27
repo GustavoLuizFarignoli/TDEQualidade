@@ -54,4 +54,34 @@ public class Checklist {
         }
         return tamanho;
     }
+    public static void verPerguntas(){
+        for (int i = 0; i < Checklist.perguntas.size(); i++){
+            System.out.println("=-=-=-=-=-=-=-=-=-=-=-="+"\nPergunta N"+i);
+            System.out.println("Descrição:");
+            System.out.println(Checklist.perguntas.get(i).getDescricao());
+            System.out.print("Avaliador:");
+            System.out.println(Checklist.perguntas.get(i).getAvaliador());
+            System.out.println("Observações:");
+            if (Checklist.perguntas.get(i).getObservacoes() == null){
+                System.out.println("Sem Observações");
+            } else {
+                System.out.println(Checklist.perguntas.get(i).getObservacoes());
+            }
+            System.out.println("Ação Corretiva:");
+            if (Checklist.perguntas.get(i).getAcao() == null){
+                System.out.println("Sem Observações");
+            } else {
+                System.out.println(Checklist.perguntas.get(i).getAcao());
+            }
+            System.out.print("Responsavél da área:");
+            System.out.println(Checklist.perguntas.get(i).getResponsavel());
+            System.out.print("Resultado:");
+            if (Checklist.perguntas.get(i).getResultado() == null){
+                System.out.println("Não Avaliado");
+            } else {
+                System.out.println(Checklist.perguntas.get(i).getResultado());
+            }
+        }
+    }
+
 }

@@ -1,9 +1,18 @@
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner teclado = new Scanner(System.in);
         boolean running = true;
+        Perguntas perguntas;
+        try {
+            perguntas = (Perguntas) Serializador.ler("Perguntas");
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        Checklist.perguntas = perguntas.getPerguntas();
+
         System.out.println("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
 
         while(running) {
@@ -104,6 +113,12 @@ public class Main {
         Checklist.perguntas.add(p19);
         Pergunta p20 = new Pergunta("O produto integrado e o material de apoio são entregues às partes interessadas?\n","Gerente de Projetos");
         Checklist.perguntas.add(p20);
+        Perguntas perguntas = new Perguntas(Checklist.perguntas);
+        try {
+            Serializador.gravar("Perguntas", perguntas);
+        }catch (IOException e){
+            throw new RuntimeException(e);
+        }
     }
 
     public static void aderencia(){

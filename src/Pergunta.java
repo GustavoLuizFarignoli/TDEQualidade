@@ -1,4 +1,6 @@
-public class Pergunta {
+import java.io.Serializable;
+
+public class Pergunta implements Serializable {
     private String descricao;
     private Avaliador avaliador;
     private String resultado;

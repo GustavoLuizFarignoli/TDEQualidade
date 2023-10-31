@@ -51,7 +51,7 @@ public class Main {
 
     public static void menu(Scanner teclado){
         int op = 0;
-        System.out.println("1-Verificar Conformidada\n2-Ver Perguntas\n3-Avaliar Perguntas\n4-Avaliar Pergunta especifica\n5-Sair");
+        System.out.println("1-Verificar Conformidada\n2-Ver Perguntas\n3-Avaliar Perguntas\n4-Editar Avaliação\n5-Sair");
         op = teclado.nextInt();
         switch(op) {
             case 1:
@@ -76,8 +76,10 @@ public class Main {
                             int conformidade = teclado.nextInt();
                             if (conformidade == 6){
                                 break;
-                            }
-                            else if (conformidade != 5 & conformidade != 1){
+                            } else if (conformidade == 1) {
+                                p.setResultado(Checklist.conformidade(conformidade));
+                                p.setAvaliador(Singleton.instancia);
+                            } else if (conformidade != 5){
                                 p.setResultado(Checklist.conformidade(conformidade));
                                 p.setAvaliador(Singleton.instancia);
                                 System.out.println("Digite as observações da avaliação");
@@ -92,7 +94,34 @@ public class Main {
                 }
                 break;
             case 4:
-                System.out.println("Avaliando");
+                System.out.println("Digite qual o número a pergunta que deseja avaliar");
+                int indice = teclado.nextInt();
+                if (indice > Checklist.perguntas.size() || indice < 0){
+                    System.out.println("Essa não é uma pergunta válida, por favor tente novamente");
+                } else {
+                    Pergunta p = Checklist.perguntas.get(indice-1);
+                    System.out.println("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+                    System.out.println(p.getDescricao());
+                    System.out.println("1-Conforme\n2-Não Conforme - Prioridade Baixa\n3-Não Conforme - Prioridade Média\n4-Não Conforme - Prioridade Alta\n5-Remover Avaliação\n6-Cancelar");
+                    int conformidade = teclado.nextInt();
+                    if (conformidade == 1){
+                        p.setResultado(Checklist.conformidade(conformidade));
+                        p.setAvaliador(Singleton.instancia);
+                    } else if (conformidade < 5) {
+                        p.setResultado(Checklist.conformidade(conformidade));
+                        p.setAvaliador(Singleton.instancia);
+                        System.out.println("Digite as observações da avaliação");
+                        teclado.nextLine();
+                        p.setObservacoes(teclado.nextLine());
+                        System.out.println("Digite as ações corretivas sugeridas");
+                        p.setAcao(teclado.nextLine());
+                    } else if (conformidade == 5){
+                        p.setAvaliador(null);
+                        p.setObservacoes(null);
+                        p.setAcao(null);
+                        p.setResultado(Checklist.conformidade(conformidade));
+                    }
+                }
                 break;
             case 5:
                 System.out.println("Realizando log out...");
@@ -154,10 +183,10 @@ public class Main {
 
     public static void aderencia(){
         //tratar resultado caso o valor seja nulo para não ficar feio
-        System.out.println("Conformidade (Aderência): " + Checklist.verconforme() + " %");
-        System.out.println("Não Conformidade - Prioridade Baixa: " + Checklist.verbaixa()+ " %");
-        System.out.println("Não Conformidade - Prioridade Média: " + Checklist.vermedia()+ " %");
-        System.out.println("Não Conformidade - Prioridade Alta: " + Checklist.veralta()+ " %");
-        System.out.println("Total Avaliadas: " + Checklist.vernull());
+        System.out.println("Conformidade (Aderência): " + String.format("%.2f",Checklist.verconforme())  + " %");
+        System.out.println("Não Conformidade - Prioridade Baixa: " + String.format("%.2f",Checklist.verbaixa())  + " %");
+        System.out.println("Não Conformidade - Prioridade Média: " + String.format("%.2f",Checklist.vermedia()) + " %");
+        System.out.println("Não Conformidade - Prioridade Alta: " + String.format("%.2f",Checklist.veralta()) + " %");
+        System.out.println("Total Avaliadas: " + Checklist.vernull() + "/" + Checklist.perguntas.size());
     }
 }

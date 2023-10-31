@@ -12,7 +12,12 @@ public class Checklist {
                 conforme += 1;
             }
         }
-        return (((double) conforme / tamanho) * 100);
+        double result = (((double) conforme / tamanho) * 100);
+        if (Double.isNaN(result)){
+            return 0;
+        } else {
+            return result;
+        }
     }
 
     public static double verbaixa(){
@@ -23,7 +28,12 @@ public class Checklist {
                 baixa += 1;
             }
         }
-        return (((double) baixa / tamanho) * 100);
+        double result = (((double) baixa / tamanho) * 100);
+        if (Double.isNaN(result)){
+            return 0;
+        } else {
+            return result;
+        }
     }
     public static double vermedia(){
         int media = 0;
@@ -33,7 +43,12 @@ public class Checklist {
                 media += 1;
             }
         }
-        return (((double) media / tamanho) * 100);
+        double result = (((double) media / tamanho) * 100);
+        if (Double.isNaN(result)){
+            return 0;
+        } else {
+            return result;
+        }
     }
     public static double veralta(){
         int alta = 0;
@@ -43,7 +58,12 @@ public class Checklist {
                 alta += 1;
             }
         }
-        return (((double) alta / tamanho) * 100);
+        double result = (((double) alta / tamanho) * 100);
+        if (Double.isNaN(result)){
+            return 0;
+        } else {
+            return result;
+        }
     }
     public static int vernull(){
         int tamanho = perguntas.size();
@@ -88,7 +108,7 @@ public class Checklist {
             }
             System.out.println("Ação Corretiva: ");
             if (Checklist.perguntas.get(i).getAcao() == null){
-                System.out.println("Sem Observações");
+                System.out.println("Sem Especifições");
             } else {
                 System.out.println(Checklist.perguntas.get(i).getAcao());
             }

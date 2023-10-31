@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -11,6 +12,7 @@ public class Main {
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+        Checklist.perguntas = null;
         Checklist.perguntas = perguntas.getPerguntas();
 
         System.out.println("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
@@ -27,7 +29,7 @@ public class Main {
     public static boolean loginmenu(Scanner teclado){
         int op = 0;
         boolean running = true;
-        System.out.println("1-Login\n2-Sair");
+        System.out.println("1-Login\n2-Sair\n3-Reinicializar Perguntas");
         op = teclado.nextInt();
         switch(op) {
             case 1:
@@ -50,7 +52,7 @@ public class Main {
     public static void menu(Scanner teclado){
         //O Programa em si vem aqui
         int op = 0;
-        System.out.println("1-Verificar Conformidada\n2-Ver Perguntas\n3-Avaliar Pergunta\n4-Sair");
+        System.out.println("1-Verificar Conformidada\n2-Ver Perguntas\n3-Avaliar Perguntas\n4-Avaliar Pergunta especifica\n5-Sair");
         op = teclado.nextInt();
         switch(op) {
             case 1:
@@ -60,9 +62,25 @@ public class Main {
                 Checklist.verPerguntas();
                 break;
             case 3:
-                System.out.println("Avaliando");
+                boolean continuar = true;
+                while (continuar){
+                    //função para buscar primeira pergunta não avaliada
+                    Pergunta p = Checklist.perguntanaoavaliada();
+                    if (p != null){
+                        System.out.println(p.getDescricao());
+                        System.out.println("1-Conforme\n2-Não Conforme - Prioridade Baixa\n3-Não Conforme - Prioridade Média\n4-Não Conforme - Prioridade Alta");
+                        int conformidade = teclado.nextInt();
+                        p.setResultado(Checklist.conformidade(conformidade));
+                    } else {
+                        System.out.println("Não há pergunta para avaliar");
+                        continuar = false;
+                    }
+                }
                 break;
             case 4:
+                System.out.println("Avaliando");
+                break;
+            case 5:
                 System.out.println("Realizando log out...");
                 Singleton.logout();
                 break;
@@ -71,14 +89,7 @@ public class Main {
     }
 
     public static void debug(){
-        Pergunta p1 = new Pergunta("Titulo?","Gustavo");
-        p1.setResultado("Conforme");
-        Checklist.perguntas.add(p1);
-        Pergunta p2 = new Pergunta("Github?","Gustavo");
-        p2.setResultado("Não Conforme - Prioridade Baixa");
-        Checklist.perguntas.add(p2);
-        Pergunta p3 = new Pergunta("Requisitos?","Gustavo");
-        Checklist.perguntas.add(p3);
+        Checklist.perguntas = new ArrayList<Pergunta>();
         Pergunta p4 = new Pergunta("Uma estratégia de integração dos componentes do produto foi estabelecida??","Gerente de Projetos");
         Checklist.perguntas.add(p4);
         Pergunta p5 = new Pergunta("Existem procedimentos e critérios definidos para a integração dos componentes?\n","Gerente de Projetos");
@@ -116,12 +127,14 @@ public class Main {
         Perguntas perguntas = new Perguntas(Checklist.perguntas);
         try {
             Serializador.gravar("Perguntas", perguntas);
+            System.out.println("Gravado");
         }catch (IOException e){
             throw new RuntimeException(e);
         }
     }
 
     public static void aderencia(){
+        //tratar resultado caso o valor seja nulo para não ficar feio
         System.out.println("Conformidade (Aderência): " + Checklist.verconforme() + " %");
         System.out.println("Não Conformidade - Prioridade Baixa: " + Checklist.verbaixa()+ " %");
         System.out.println("Não Conformidade - Prioridade Média: " + Checklist.vermedia()+ " %");

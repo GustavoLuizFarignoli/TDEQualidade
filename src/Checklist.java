@@ -54,6 +54,29 @@ public class Checklist {
         }
         return tamanho;
     }
+    public static Pergunta perguntanaoavaliada(){
+        for (Pergunta pergunta : perguntas) {
+            if (pergunta.getResultado() == null) {
+                return pergunta;
+            }
+        }
+        return null;
+    }
+    public static String conformidade(int op){
+        if (op == 1){
+            return "Conforme";
+        }
+        if (op == 2){
+            return "Não Conforme - Prioridade Baixa";
+        }
+        if (op == 3){
+            return "Não Conforme - Prioridade Média";
+        }
+        if (op == 4){
+            return "Não Conforme - Prioridade Alta";
+        }
+        return null;
+    }
     public static void verPerguntas(){
         for (int i = 0; i < Checklist.perguntas.size(); i++){
             System.out.println("=-=-=-=-=-=-=-=-=-=-=-="+"\nPergunta N"+i);

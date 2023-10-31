@@ -50,7 +50,6 @@ public class Main {
     }
 
     public static void menu(Scanner teclado){
-        //O Programa em si vem aqui
         int op = 0;
         System.out.println("1-Verificar Conformidada\n2-Ver Perguntas\n3-Avaliar Perguntas\n4-Avaliar Pergunta especifica\n5-Sair");
         op = teclado.nextInt();
@@ -62,18 +61,33 @@ public class Main {
                 Checklist.verPerguntas();
                 break;
             case 3:
-                boolean continuar = true;
-                while (continuar){
-                    //função para buscar primeira pergunta não avaliada
-                    Pergunta p = Checklist.perguntanaoavaliada();
-                    if (p != null){
-                        System.out.println(p.getDescricao());
-                        System.out.println("1-Conforme\n2-Não Conforme - Prioridade Baixa\n3-Não Conforme - Prioridade Média\n4-Não Conforme - Prioridade Alta");
-                        int conformidade = teclado.nextInt();
-                        p.setResultado(Checklist.conformidade(conformidade));
-                    } else {
-                        System.out.println("Não há pergunta para avaliar");
-                        continuar = false;
+                //confere se há perguntas para serem avaliadas
+                int tamanho = Checklist.vernull();
+                if (tamanho == Checklist.perguntas.size()){
+                    System.out.println("Não há pergunta para avaliar");
+
+                } else {
+                    for (Pergunta p : Checklist.perguntas){
+                        if (p.getResultado() == null) {
+                            //Achou uma pergunta para ser avaliada, pede ao usuário como proceder
+                            System.out.println("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+                            System.out.println(p.getDescricao());
+                            System.out.println("1-Conforme\n2-Não Conforme - Prioridade Baixa\n3-Não Conforme - Prioridade Média\n4-Não Conforme - Prioridade Alta\n5-Pular Perguntas\n6-Parar de Avaliar");
+                            int conformidade = teclado.nextInt();
+                            if (conformidade == 6){
+                                break;
+                            }
+                            else if (conformidade != 5 & conformidade != 1){
+                                p.setResultado(Checklist.conformidade(conformidade));
+                                p.setAvaliador(Singleton.instancia);
+                                System.out.println("Digite as observações da avaliação");
+                                teclado.nextLine();
+                                p.setObservacoes(teclado.nextLine());
+                                System.out.println("Digite as ações corretivas sugeridas");
+                                p.setAcao(teclado.nextLine());
+                            }
+                            System.out.println("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+                        }
                     }
                 }
                 break;
@@ -84,6 +98,12 @@ public class Main {
                 System.out.println("Realizando log out...");
                 Singleton.logout();
                 break;
+        }
+        Perguntas perguntas = new Perguntas(Checklist.perguntas);
+        try {
+            Serializador.gravar("Perguntas", perguntas);
+        }catch (IOException e){
+            throw new RuntimeException(e);
         }
         System.out.println("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
     }
@@ -127,7 +147,6 @@ public class Main {
         Perguntas perguntas = new Perguntas(Checklist.perguntas);
         try {
             Serializador.gravar("Perguntas", perguntas);
-            System.out.println("Gravado");
         }catch (IOException e){
             throw new RuntimeException(e);
         }

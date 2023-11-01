@@ -107,6 +107,8 @@ public class Main {
                     if (conformidade == 1){
                         p.setResultado(Checklist.conformidade(conformidade));
                         p.setAvaliador(Singleton.instancia);
+                        p.setObservacoes(null);
+                        p.setAcao(null);
                     } else if (conformidade < 5) {
                         p.setResultado(Checklist.conformidade(conformidade));
                         p.setAvaliador(Singleton.instancia);
@@ -114,6 +116,7 @@ public class Main {
                         teclado.nextLine();
                         p.setObservacoes(teclado.nextLine());
                         System.out.println("Digite as ações corretivas sugeridas");
+                        teclado.nextLine();
                         p.setAcao(teclado.nextLine());
                     } else if (conformidade == 5){
                         p.setAvaliador(null);
